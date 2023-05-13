@@ -55,7 +55,7 @@
 ```
 
 <br/><br/>
-<img src="https://github.com/jrhe123/gpt-next/assets/17329299/46774b4e-7993-459c-90c3-e70225dd8b47"  width="300"><br />
+<img src="https://github.com/jrhe123/gpt-next/assets/17329299/46774b4e-7993-459c-90c3-e70225dd8b47"  width="600"><br />
 
 
 <br /><br />
