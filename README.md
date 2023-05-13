@@ -19,6 +19,13 @@
       * Style
       * Quantity
       * Way of Thinking
+      
+* Cheatsheet
+| blah blah blah: |
+| *** |
+| paragraph  |
+| ***     |
+
 
 
 <br /><br />
