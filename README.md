@@ -39,6 +39,22 @@
 ```
 
 
+
+<br /><br />
+* Examples:
+```
+Completions:
+{
+ "model": "text-davinci-003",
+ "prompt": "Say this is a test",
+ "max_tokens": 7, // return content token limit
+ "temperature": 0, // higher -> increase the random
+ "stream": false
+}
+```
+
+
+
 <br /><br />
 * Prompts:
   * RIO (Role + Input + Output)
