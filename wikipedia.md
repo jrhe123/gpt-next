@@ -3,6 +3,22 @@
 ### Stack
 <img src="https://github.com/jrhe123/gpt-next/assets/17329299/5f931286-e6bd-4778-b403-87b62c54e1da"  width="150"><br />
 
+* Basic
+  * React
+  * Typescript
+* UI
+  * MUI
+  * Tailwind
+* API
+  * Vercel edge func
+  * Cloudflare proxy
+* Deploy
+  * Github
+  * Vercel  
+
+<br /><br />
+
+
 * Overview (Choose your cloud service)
 ```
        ------------------------ ⏩ |  OpenAI  | ⬅️ --------------------------
