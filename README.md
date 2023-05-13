@@ -49,7 +49,7 @@ Completions:
  "prompt": "Say this is a test",
  "max_tokens": 7, // return content token limit
  "temperature": 0, // higher -> increase the random [Range 0-2]
- "stream": false
+ "stream": false // server event
 }
 ```
 
@@ -77,7 +77,7 @@ Chat:
  ], // previous conversation records
  "max_tokens": 7, // return content token limit
  "temperature": 0, // higher -> increase the random [Range 0-2]
- "stream": false
+ "stream": false // server event
 }
 ```
 
