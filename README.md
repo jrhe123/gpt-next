@@ -74,7 +74,7 @@ Chat:
    "role": "user",
    "content": "Where was it played?"
   }
- ],
+ ], // previous conversation records
  "max_tokens": 7, // return content token limit
  "temperature": 0, // higher -> increase the random [Range 0-2]
  "stream": false
