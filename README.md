@@ -48,7 +48,35 @@ Completions:
  "model": "text-davinci-003",
  "prompt": "Say this is a test",
  "max_tokens": 7, // return content token limit
- "temperature": 0, // higher -> increase the random
+ "temperature": 0, // higher -> increase the random [Range 0-2]
+ "stream": false
+}
+```
+
+```
+Chat:
+{
+ "model": "gpt-3.5-turbo",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You are a helpful assistant."
+  },
+  {
+   "role": "user",
+   "content": "Who won the NBA title in 2023?"
+  },
+  {
+   "role": "assistant",
+   "content": "The Los Angeles Lakers won the World Champion in 2023."
+  },
+  {
+   "role": "user",
+   "content": "Where was it played?"
+  }
+ ],
+ "max_tokens": 7, // return content token limit
+ "temperature": 0, // higher -> increase the random [Range 0-2]
  "stream": false
 }
 ```
