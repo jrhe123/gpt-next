@@ -23,9 +23,9 @@
 * Cheatsheet
 ```
 | blah blah blah: |
-| *** |
-| paragraph  |
-| ***     |
+| ***             |
+| paragraph       |
+| ***             |
 ```
 
 
