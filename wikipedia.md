@@ -7,7 +7,7 @@
   * React
   * Typescript
 * UI
-  * MUI
+  * Mantine UI (https://mantine.dev/)
   * Tailwind
 * API
   * Vercel edge func
