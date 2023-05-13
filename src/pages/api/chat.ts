@@ -8,6 +8,7 @@ export type APIResponse = {
 export type Env = Record<string, unknown> & {
   OPEN_API_KEY: string;
   OPEN_API_URL: string;
+  CLOUDFLARE_REDIRECT_URL: string;
 }
 
 // GPT Types
@@ -60,9 +61,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIResponse>
 ) {
+  // NOTES: use cloudflare to detour the firewall (e.g., China, Italy, etc..)
+  const isCountryRestrictGPT = true
   const env = process.env as unknown as Env
+  const apiUrl = isCountryRestrictGPT ? env.CLOUDFLARE_REDIRECT_URL : env.OPEN_API_URL
   const chatModel = ChatModel.getInstance(
-    env.OPEN_API_URL,
+    apiUrl,
     env.OPEN_API_KEY,
   )
   const response = await chatModel.requestOpenAI({
@@ -77,6 +81,14 @@ export default async function handler(
     temperature: 0, // higher -> increase the random [Range 0-2]
     stream: false // server sent event
   })
+
+  console.log("!!!!!!!!!!")
+  console.log("!!!!!!!!!!")
+  console.log("!!!!!!!!!!")
+  console.log("!!!!!!!!!!")
+  console.log("!!!!!!!!!!")
+  console.log("response: ", response)
+
   res.status(200).json({ name: 'John Doe 333' })
 }
 
