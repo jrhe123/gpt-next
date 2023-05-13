@@ -7,3 +7,5 @@
 
 ### UI
 <img src="https://github.com/jrhe123/gpt-next/assets/17329299/84011675-d46d-4f06-8dd2-de50fa3da0de"  height="30">
+
+<img src="https://github.com/jrhe123/gpt-next/assets/17329299/5f931286-e6bd-4778-b403-87b62c54e1da"  height="150">
