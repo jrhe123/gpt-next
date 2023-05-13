@@ -9,6 +9,16 @@
   * GPT4 (8k / 32k)
 
 * prompts:
+  * RIO (Role + Input + Output)
+    * Role: Assistant / Teacher / Mentor
+    * Input
+      * Context
+      * Task
+    * Output
+      * Format
+      * Style
+      * Quantity
+      * Way of Thinking
 
 
 <br /><br />
