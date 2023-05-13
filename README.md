@@ -21,10 +21,12 @@
       * Way of Thinking
       
 * Cheatsheet
+```
 | blah blah blah: |
 | *** |
 | paragraph  |
 | ***     |
+```
 
 
 
