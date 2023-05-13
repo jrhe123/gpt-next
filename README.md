@@ -46,6 +46,8 @@
     * https://platform.openai.com/account/api-keys
   * API usage
     * https://platform.openai.com/account/usage
+  * API pricing
+    * https://openai.com/pricing
 
 ```
 Completions:
