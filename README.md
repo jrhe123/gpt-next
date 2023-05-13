@@ -41,7 +41,7 @@
 
 
 <br /><br />
-* Examples:
+* API Examples:
 ```
 Completions:
 {
