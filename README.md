@@ -6,4 +6,4 @@
 
 
 ### UI
-<img src="https://github.com/jrhe123/gpt-next/assets/17329299/84011675-d46d-4f06-8dd2-de50fa3da0de"  width="150">
+<img src="https://github.com/jrhe123/gpt-next/assets/17329299/84011675-d46d-4f06-8dd2-de50fa3da0de"  height="30">
