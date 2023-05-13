@@ -12,6 +12,9 @@
   
 <img src="https://github.com/jrhe123/gpt-next/assets/17329299/0b863b79-e2dc-46b3-a698-0fe7d7e5f766" width="300"><br />
 
+
+
+<br /><br />
 * Model
   * Natural language (NLP)
     * GPT4
@@ -25,6 +28,9 @@
   * Code generation
     * CodeX 
 
+
+
+<br /><br />
 * Prompts:
   * RIO (Role + Input + Output)
     * Role: Assistant / Teacher / Mentor
@@ -37,6 +43,9 @@
       * Quantity
       * Way of Thinking
 
+
+
+<br /><br />
 * Common Prompts:
   * Zero-shot:
     * e.g., how to use javascript slice 
@@ -46,7 +55,10 @@
     * e.g., mix with 10-100GB data, weighted the original model 
   * Chain of thought:
     * e.g., solve the problem, step by step
-      
+
+
+
+<br /><br />
 * Cheatsheet
 ```
 | blah blah blah: |
