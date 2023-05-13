@@ -1,5 +1,5 @@
 # gpt-next (Language Learning Assistant POC)
-### Continue
+### Continue reading
 * https://github.com/jrhe123/gpt-next/blob/main/gpt-next.md
 
 ### OpenAI
