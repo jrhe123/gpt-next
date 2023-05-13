@@ -7,6 +7,12 @@
   * 0.5 chinese word (average)
   * 0.75 english word
   * GPT4 (8k / 32k)
+  * warning: will lose the starting context if exceed the token limit
+  * https://platform.openai.com/tokenizer
+  
+<img src="https://github.com/jrhe123/gpt-next/assets/17329299/0b863b79-e2dc-46b3-a698-0fe7d7e5f766" width="300"><br />
+
+* Model
 
 * Prompts:
   * RIO (Role + Input + Output)
