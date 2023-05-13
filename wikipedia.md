@@ -5,19 +5,19 @@
 
 * Overview
 ```
-       -------------------------➡|  OpenAI  |
-      |                          |    API   |
-      |                               |
-      |                               |
-      |                               ⬇  
+       ------------------------ ➡|  OpenAI  | ⬅
+      |                -------- ➡|    API   |
+      |               |                |
+      |               |                |
+      |               |                ⬇  
       |            | VPS |     |Cloudflare worker|   |Cloudflare page|   | Vercel |
       |           ------------------------------------------------------------------
-   | Proxy |              |   API Proxy  |                |   NextJS App   |
-      ⬆
-      |
-      |
-      |           |   Service   |
-      ----------- |   gpt-next  |
+   | Proxy |                |   API Proxy  |              |   NextJS App   |
+      ⬆                           ⬆                               ⬆
+      |                            |                                |
+      |                            |                                |
+      |                      |   Service   |                        |
+      ---------------------- |   gpt-next  | -----------------------
 
 ```
 
