@@ -42,8 +42,10 @@
 
 <br /><br />
 * API Examples: (Inject your own key into the code)
-  * https://platform.openai.com/account/api-keys
-  * https://platform.openai.com/account/usage
+  * Get your api key
+    * https://platform.openai.com/account/api-keys
+  * API usage
+    * https://platform.openai.com/account/usage
 
 ```
 Completions:
