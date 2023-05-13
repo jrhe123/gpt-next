@@ -55,6 +55,8 @@
 ```
 
 <br/><br/>
+
+* Cloudflare redirect API call service
 <img src="https://github.com/jrhe123/gpt-next/assets/17329299/19c8f5c7-cda0-4990-adef-ccc41453b3e8"  width="600"><br />
 
 
