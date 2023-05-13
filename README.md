@@ -19,6 +19,16 @@
       * Style
       * Quantity
       * Way of Thinking
+
+* Common Prompts:
+  * Zero-shot:
+    * e.g., how to use javascript slice 
+  * Few-shot:
+    * e.g., provide DSL model (storybook), and build a new webpage 
+  * Fine-tune:
+    * e.g., mix with 10-100GB data, weighted the original model 
+  * Chain of thought:
+    * e.g., solve the problem, step by step
       
 * Cheatsheet
 ```
