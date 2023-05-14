@@ -12,7 +12,7 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
     this._apiKey = apiKey
   }
 
-  static getInstance(url: string, apiKey: string) {
+  static getInstance(url: string, apiKey: string): ChatModel {
     if (!this._instance) {
       this._instance = new ChatModel(url, apiKey)
     }

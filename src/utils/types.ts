@@ -73,3 +73,8 @@ export type GPTError = {
   param: unknown
   code: unknown
 }
+
+// Storage Types
+export type MessageStorageType = {
+  [key: string]: GPTResponseMessage[]
+}
