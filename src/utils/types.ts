@@ -13,12 +13,13 @@ export type Env = Record<string, unknown> & {
 
 // GPT Types
 export type GPTOptions = {
-  // reference: https://platform.openai.com/docs/api-reference/completions/create
+  // doc reference:
+  // https://platform.openai.com/docs/api-reference/completions/create
   maxTokens?: number
-  temperature?: number
-  topP?: number // alternative temperature
-  frequencyPenalty?: number // [-2,2]
-  presencePenalty?: number // [-2,2]
+  temperature?: number // [-2,2] (default 0)
+  topP?: number // alternative temperature (default 1)
+  frequencyPenalty?: number // [-2,2] (default 0)
+  presencePenalty?: number // [-2,2] (default 0)
   stream?: boolean
 }
 export enum GPTModel {

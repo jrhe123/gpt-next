@@ -5,13 +5,13 @@ import {
   GPTResponseChoice
 } from './types'
 
-type Props = {
+type ParamProps = {
   prompt: string
   history?: GPTRequestMessage[]
   options?: GPTOptions
 }
 export const getCompletion = async (
-  params: Props
+  params: ParamProps
 ): Promise<GPTResponseChoice | null> => {
   const response = await fetch('/api/chat', {
     headers: {

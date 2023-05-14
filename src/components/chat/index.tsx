@@ -13,12 +13,10 @@ export const Chat = () => {
     const response = await getCompletion({
       prompt
     })
-    console.log('$$$$$$$$')
-    console.log('$$$$$$$$')
-    console.log('$$$$$$$$')
-    console.log('response: ', response)
     if (response) {
       setCompletion(response.message.content)
+    } else {
+      setCompletion('no result..')
     }
   }
 
