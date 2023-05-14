@@ -8,6 +8,8 @@ import {
   ColorScheme
 } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
+// error boundary handles
+import ErrorBoundary from '../components/errorBoundary'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
@@ -16,23 +18,25 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
-      <MantineProvider
-        theme={{
-          colorScheme,
-          primaryColor: 'green'
-        }}
-        withNormalizeCSS
-        withGlobalStyles
+    <ErrorBoundary>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        {/* main entry */}
-        <Component {...pageProps} />
-        {/* notifications component */}
-        <Notifications position="top-right" zIndex={999} />
-      </MantineProvider>
-    </ColorSchemeProvider>
+        <MantineProvider
+          theme={{
+            colorScheme,
+            primaryColor: 'green'
+          }}
+          withNormalizeCSS
+          withGlobalStyles
+        >
+          {/* main entry */}
+          <Component {...pageProps} />
+          {/* notifications component */}
+          <Notifications position="top-right" zIndex={999} />
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </ErrorBoundary>
   )
 }
