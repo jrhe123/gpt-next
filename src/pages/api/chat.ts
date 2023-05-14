@@ -1,65 +1,19 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-// libs
-import { z } from 'zod' // https://morioh.com/p/cc9d89e8a10b
-
 // utils
-import ChatModel, {
+import ChatModel from '@/utils/chatModel'
+import {
+  GPTOptions,
   GPTError,
   GPTModel,
   GPTRequestData,
   GPTResponse,
   MessageRole
-} from '@/utils/chatModel'
+} from '@/utils/types'
 import { APIResponse, Env } from '@/utils/types'
-
-// Validate form
-const zRoleEnum = z.nativeEnum(MessageRole, {
-  errorMap: (issue, ctx) => {
-    return { message: 'please select message role [system,user,assistant]' }
-  }
-})
-const zGPTRequestMessage = z.object({
-  role: zRoleEnum,
-  content: z.string({
-    required_error: 'content is required',
-    invalid_type_error: 'content must be a string'
-  })
-})
-const schema = z.object({
-  prompt: z
-    .string({
-      required_error: 'prompt is required',
-      invalid_type_error: 'prompt must be a string'
-    })
-    .min(10, 'prompt at least 10 characters'),
-  history: z.array(zGPTRequestMessage).optional(),
-  options: z
-    .object({
-      maxTokens: z
-        .number({
-          invalid_type_error: 'maxTokens must be a number'
-        })
-        .positive('maxTokens must be positive')
-        .int('maxTokens must be a integer')
-        .lte(100, 'maxTokens must not greater than 100')
-        .optional(),
-      temperature: z
-        .number({
-          invalid_type_error: 'temperature must be a number'
-        })
-        .positive('temperature must be positive')
-        .lte(2, 'temperature must be in range of [0,2]')
-        .optional(),
-      stream: z
-        .boolean({
-          invalid_type_error: 'temperature must be a boolean'
-        })
-        .optional()
-    })
-    .optional()
-})
+// dto
+import { chatFormSchema } from './dto/chatForm'
 
 // Controller
 export default async function handler(
@@ -71,7 +25,7 @@ export default async function handler(
       .status(405)
       .json({ confirmation: 'fail', message: 'Method Not Allowed' })
   // zod validate
-  const validated = schema.safeParse(req.body)
+  const validated = chatFormSchema.safeParse(req.body)
   if (!validated.success) {
     const { errors } = validated.error
     console.log('errors: ', errors)
@@ -91,6 +45,7 @@ export default async function handler(
   // init chat model
   const chatModel = ChatModel.getInstance(apiUrl, env.OPEN_API_KEY)
   // format request data
+  const formattedOptions = options as GPTOptions
   const requestData: GPTRequestData = {
     model: GPTModel.GPT35_TURBO,
     messages: [
@@ -104,9 +59,12 @@ export default async function handler(
         content: prompt
       }
     ],
-    max_tokens: options.maxTokens || 7, // return content token limit
-    temperature: options.temperature || 0, // higher -> increase the random [Range 0-2]
-    stream: options.stream || false // server sent event
+    max_tokens: formattedOptions.maxTokens || 7, // return content token limit
+    temperature: formattedOptions.temperature || 0, // higher -> increase the random [Range 0-2]
+    top_p: formattedOptions.topP || 1,
+    frequency_penalty: formattedOptions.frequencyPenalty || 0,
+    presence_penalty: formattedOptions.presencePenalty || 0,
+    stream: formattedOptions.stream || false // server sent event
   }
   // call openAI now
   const response = await chatModel.requestOpenAI(requestData)

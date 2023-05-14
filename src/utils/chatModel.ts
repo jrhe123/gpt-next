@@ -1,49 +1,6 @@
 import { IModel } from './interfaces'
-
-// GPT Types
-export enum GPTModel {
-  GPT35_TURBO = 'gpt-3.5-turbo'
-}
-export enum MessageRole {
-  SYSTEM = 'system',
-  USER = 'user',
-  ASSISTANT = 'assistant'
-}
-export type GPTRequestMessage = {
-  role: MessageRole
-  content: string
-}
-export type GPTRequestData = {
-  model: GPTModel
-  messages: GPTRequestMessage[]
-  max_tokens: number
-  temperature: number
-  stream: boolean
-}
-export type GPTResponse = {
-  success: boolean
-  id: string
-  object: string
-  created: number
-  model: string
-  usage: {
-    prompt_tokens: number
-    completion_tokens: number
-    total_tokens: number
-  }
-  choices: {
-    message: Object[]
-    finish_reason: string
-    index: number
-  }[]
-}
-export type GPTError = {
-  success: boolean
-  message: string
-  type: string
-  param: unknown
-  code: unknown
-}
+//
+import { GPTError, GPTRequestData, GPTResponse } from './types'
 
 class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
   private static _instance: ChatModel
