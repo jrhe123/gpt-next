@@ -1,4 +1,4 @@
-import { GPTResponseMessage, MessageStorageType } from './types'
+import type { GPTResponseMessage, MessageStorageType } from './types'
 // custom LocalStorage class
 import LocalStorage from './storage'
 

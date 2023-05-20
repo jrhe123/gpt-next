@@ -4,7 +4,7 @@ import { Textarea, ActionIcon } from '@mantine/core'
 import { IconSend, IconEraser } from '@tabler/icons-react'
 import clsx from 'clsx'
 // utils
-import { getCompletion } from '@/utils/getCompletion'
+import chatService from '@/utils/chatService'
 import { GPTResponseMessage, MessageRole } from '@/utils/types'
 // storage
 import { setChatLog, getChatLogs, cleanChatLogs } from '@/utils/getChatStorage'
@@ -17,12 +17,86 @@ export const Chat = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [chatList, setChatList] = useState<GPTResponseMessage[]>([])
 
+  chatService.actions = {
+    onCompleting: (result) => setSuggestion(result),
+    onCompleted: () => {
+      setIsLoading(false)
+    }
+  }
+
+  const setSuggestion = (data: string) => {
+    if (data === '') return
+    const length = chatList.length
+    const lastMessage = length ? chatList[length - 1] : null
+    let newList: GPTResponseMessage[] = []
+    let assistantChatLog
+    if (lastMessage?.role === MessageRole.ASSISTANT) {
+      assistantChatLog = {
+        ...lastMessage,
+        content: data
+      }
+      newList = [...chatList.slice(0, length - 1), assistantChatLog]
+    } else {
+      assistantChatLog = {
+        role: MessageRole.ASSISTANT,
+        content: data
+      }
+      newList = [...chatList, assistantChatLog]
+    }
+    setChatList(newList)
+    setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+  }
+
   useEffect(() => {
     setChatList(getChatLogs(LOCAL_CHANNEL_KEY))
   }, [])
 
+  /**
+   * json version
+   */
+  // const handleSendMessage = async () => {
+  //   if (!prompt) return
+  //   // before
+  //   setIsLoading(true)
+  //   const userChatLog = {
+  //     role: MessageRole.USER,
+  //     content: prompt
+  //   }
+  //   const list = [...chatList, userChatLog]
+  //   setChatList(list)
+  //   setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
+  //   // call api now
+  //   const response = await chatService.getCompletion({
+  //     prompt,
+  //     history: chatList.slice(-4) // reduce the token usage
+  //   })
+  //   // response
+  //   if (response) {
+  //     const assistantChatLog = {
+  //       role: MessageRole.ASSISTANT,
+  //       content: response.message.content
+  //     }
+  //     setChatList([...list, assistantChatLog])
+  //     setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+  //   } else {
+  //     const assistantChatLog = {
+  //       role: MessageRole.ASSISTANT,
+  //       content: 'no result..'
+  //     }
+  //     setChatList([...list, assistantChatLog])
+  //     setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+  //   }
+  //   // after
+  //   setPrompt('')
+  //   setIsLoading(false)
+  // }
+
+  /**
+   * stream version
+   */
   const handleSendMessage = async () => {
-    if (!prompt) return
+    if (!prompt.trim()) return
+    // before
     setIsLoading(true)
     const userChatLog = {
       role: MessageRole.USER,
@@ -31,29 +105,13 @@ export const Chat = () => {
     const list = [...chatList, userChatLog]
     setChatList(list)
     setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
-    // call api now
-    const response = await getCompletion({
+    // call stream now
+    chatService.getCompletionStream({
       prompt,
       history: chatList.slice(-4) // reduce the token usage
     })
-    if (response) {
-      // setCompletion(response.message.content)
-      const assistantChatLog = {
-        role: MessageRole.ASSISTANT,
-        content: response.message.content
-      }
-      setChatList([...list, assistantChatLog])
-      setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
-    } else {
-      const assistantChatLog = {
-        role: MessageRole.ASSISTANT,
-        content: 'no result..'
-      }
-      setChatList([...list, assistantChatLog])
-      setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
-    }
+    // after
     setPrompt('')
-    setIsLoading(false)
   }
 
   const handleClearChatLogs = () => {
