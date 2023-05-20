@@ -31,8 +31,10 @@ export const Chat = () => {
     const list = [...chatList, userChatLog]
     setChatList(list)
     setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
+    // call api now
     const response = await getCompletion({
-      prompt
+      prompt,
+      history: chatList.slice(-4) // reduce the token usage
     })
     if (response) {
       // setCompletion(response.message.content)
