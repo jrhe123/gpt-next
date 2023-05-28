@@ -1,4 +1,8 @@
 # gpt-next (Language Learning Assistant POC)
+
+### Version 0.0.1 (deprecated)
+- https://github.com/jrhe123/blog-generator-gpt-next
+
 ### Continue reading
 * https://github.com/jrhe123/gpt-next/blob/main/gpt-next.md
 
