@@ -17,12 +17,9 @@ export const Chat = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [chatList, setChatList] = useState<GPTResponseMessage[]>([])
 
-  chatService.actions = {
-    onCompleting: (result) => setSuggestion(result),
-    onCompleted: () => {
-      setIsLoading(false)
-    }
-  }
+  useEffect(() => {
+    setChatList(getChatLogs(LOCAL_CHANNEL_KEY))
+  }, [])
 
   const setSuggestion = (data: string) => {
     if (data === '') return
@@ -44,12 +41,44 @@ export const Chat = () => {
       newList = [...chatList, assistantChatLog]
     }
     setChatList(newList)
-    setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
   }
 
-  useEffect(() => {
-    setChatList(getChatLogs(LOCAL_CHANNEL_KEY))
-  }, [])
+  chatService.actions = {
+    onCompleting: (result) => setSuggestion(result),
+    onCompleted: (result) => {
+      setIsLoading(false)
+      if (result) {
+        const assistantChatLog = {
+          role: MessageRole.ASSISTANT,
+          content: result
+        }
+        setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+      }
+    }
+  }
+
+  /**
+   * stream version
+   */
+  const handleSendMessage = async () => {
+    if (!prompt.trim()) return
+    // before
+    setIsLoading(true)
+    const userChatLog = {
+      role: MessageRole.USER,
+      content: prompt
+    }
+    const list = [...chatList, userChatLog]
+    setChatList(list)
+    setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
+    // call stream now
+    chatService.getCompletionStream({
+      prompt,
+      history: chatList.slice(-4) // reduce the token usage
+    })
+    // after
+    setPrompt('')
+  }
 
   /**
    * json version
@@ -90,29 +119,6 @@ export const Chat = () => {
   //   setPrompt('')
   //   setIsLoading(false)
   // }
-
-  /**
-   * stream version
-   */
-  const handleSendMessage = async () => {
-    if (!prompt.trim()) return
-    // before
-    setIsLoading(true)
-    const userChatLog = {
-      role: MessageRole.USER,
-      content: prompt
-    }
-    const list = [...chatList, userChatLog]
-    setChatList(list)
-    setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
-    // call stream now
-    chatService.getCompletionStream({
-      prompt,
-      history: chatList.slice(-4) // reduce the token usage
-    })
-    // after
-    setPrompt('')
-  }
 
   const handleClearChatLogs = () => {
     setChatList([])

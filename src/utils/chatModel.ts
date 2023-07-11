@@ -93,7 +93,7 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
                   return
                 }
 
-                console.log('text: ', text)
+                console.log('[chatModel.ts] text: ', text)
 
                 // convert back to stream
                 const q = encoder.encode(text)
