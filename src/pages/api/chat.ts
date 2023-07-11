@@ -121,6 +121,9 @@ const formatRequestData = (
   return requestData
 }
 
+/**
+ * enable stream
+ */
 export const config = {
   runtime: 'edge'
 }

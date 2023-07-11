@@ -67,7 +67,7 @@ class ChatService {
         // on completing
         this.actions?.onCompleting(result)
 
-        // sleep 0.1 sec
+        // sleep 0.1 sec, for while loop performance
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
     } finally {

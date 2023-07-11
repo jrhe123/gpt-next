@@ -89,16 +89,18 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
               try {
                 const json = JSON.parse(data)
                 const text = json.choices[0]?.delta?.content || ''
+                // gpt return dummy "new line" for the first two line
+                // we skipped them
                 if (counter < 2 && (text.match(/\n/) || []).length) {
                   return
                 }
-
                 console.log('[chatModel.ts] text: ', text)
 
                 // convert back to stream
                 const q = encoder.encode(text)
                 // save it back to controller
                 controller.enqueue(q)
+                // next line
                 counter++
               } catch (error) {
                 console.log('error: ', error)
