@@ -19,6 +19,7 @@ type Actions = {
 class ChatService {
   private static _instance: ChatService
   public actions?: Actions
+  // stop the stream generation
   private _controller: AbortController
 
   private constructor() {
@@ -33,6 +34,7 @@ class ChatService {
   }
 
   public cancel() {
+    // abort the stream generation
     this._controller.abort()
   }
 
@@ -70,10 +72,15 @@ class ChatService {
         // sleep 0.1 sec, for while loop performance
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
+    } catch (error) {
+      console.log('[chatService.ts] error: ', error)
     } finally {
+      console.log('stream call is completed / aborted')
       if (this.actions?.onCompleted) {
         this.actions.onCompleted(result)
       }
+      // since it's singletone class
+      // we need to create new abortController at the end of stream call
       this._controller = new AbortController()
     }
   }

@@ -88,6 +88,9 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
               }
               try {
                 const json = JSON.parse(data)
+                if (!json.choices) {
+                  throw new Error('No choices available')
+                }
                 const text = json.choices[0]?.delta?.content || ''
                 // gpt return dummy "new line" for the first two line
                 // we skipped them
@@ -103,7 +106,7 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
                 // next line
                 counter++
               } catch (error) {
-                console.log('error: ', error)
+                console.log('[chatModel.ts] error: ', error)
                 return
               }
             }
@@ -137,7 +140,7 @@ class ChatModel implements IModel<GPTRequestData, GPTResponse, GPTError> {
         }
       })
     } catch (error) {
-      console.log('error: ', error)
+      console.log('[chatModel.ts] error: ', error)
       return
     }
   }

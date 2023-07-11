@@ -1,7 +1,7 @@
 import { useEffect, useState, KeyboardEvent } from 'react'
 // libs
 import { Textarea, ActionIcon } from '@mantine/core'
-import { IconSend, IconEraser } from '@tabler/icons-react'
+import { IconSend, IconEraser, IconSendOff } from '@tabler/icons-react'
 import clsx from 'clsx'
 // utils
 import chatService from '@/utils/chatService'
@@ -92,6 +92,15 @@ export const Chat = () => {
     })
     // after
     setPrompt('')
+  }
+
+  /**
+   *
+   * stop the stream generation
+   *
+   */
+  const handleStopMessageGeneration = () => {
+    chatService.cancel()
   }
 
   /**
@@ -208,13 +217,23 @@ export const Chat = () => {
           onChange={(evt) => setPrompt(evt.target.value)}
           onKeyDown={(evt) => handleKeyDownTextArea(evt)}
         ></Textarea>
-        <ActionIcon
-          loading={isLoading}
-          className="ml-2"
-          onClick={() => handleSendMessage()}
-        >
-          <IconSend />
-        </ActionIcon>
+        {/* buttons */}
+        {isLoading ? (
+          <ActionIcon
+            className="ml-2"
+            onClick={() => handleStopMessageGeneration()}
+          >
+            <IconSendOff />
+          </ActionIcon>
+        ) : (
+          <ActionIcon
+            loading={isLoading}
+            className="ml-2"
+            onClick={() => handleSendMessage()}
+          >
+            <IconSend />
+          </ActionIcon>
+        )}
       </div>
     </div>
   )
