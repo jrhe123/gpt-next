@@ -6,7 +6,7 @@ import clsx from 'clsx'
 // utils
 import chatService from '@/utils/chatService'
 import { GPTResponseMessage, MessageRole } from '@/utils/types'
-// storage
+// local storage
 import { setChatLog, getChatLogs, cleanChatLogs } from '@/utils/getChatStorage'
 
 const LOCAL_CHANNEL_KEY = 'demo-channel'
@@ -18,9 +18,18 @@ export const Chat = () => {
   const [chatList, setChatList] = useState<GPTResponseMessage[]>([])
 
   useEffect(() => {
+    // fetch history from local storage & setState
     setChatList(getChatLogs(LOCAL_CHANNEL_KEY))
   }, [])
 
+  /**
+   *
+   * keep calling while "onCompleting"
+   * we keep updating state here
+   *
+   * @param data
+   * @returns
+   */
   const setSuggestion = (data: string) => {
     if (data === '') return
     const length = chatList.length
@@ -40,6 +49,7 @@ export const Chat = () => {
       }
       newList = [...chatList, assistantChatLog]
     }
+    // update state
     setChatList(newList)
   }
 
@@ -47,11 +57,13 @@ export const Chat = () => {
     onCompleting: (result) => setSuggestion(result),
     onCompleted: (result) => {
       setIsLoading(false)
+      // only save non-empty response
       if (result) {
         const assistantChatLog = {
           role: MessageRole.ASSISTANT,
           content: result
         }
+        // save assistance answer when stream completed
         setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
       }
     }
@@ -69,7 +81,9 @@ export const Chat = () => {
       content: prompt
     }
     const list = [...chatList, userChatLog]
+    // update state
     setChatList(list)
+    // save user question on submit
     setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
     // call stream now
     chatService.getCompletionStream({
@@ -122,6 +136,7 @@ export const Chat = () => {
 
   const handleClearChatLogs = () => {
     setChatList([])
+    // clean local storage
     cleanChatLogs(LOCAL_CHANNEL_KEY)
   }
 
