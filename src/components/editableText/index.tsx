@@ -25,7 +25,7 @@ export const EditableText = (props: EditableComponentProps) => {
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13) {
+    if (event.code === 'Enter') {
       setIsEditing(false)
       props.onSave(text)
     }
