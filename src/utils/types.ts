@@ -25,6 +25,8 @@ export type GPTOptions = {
 export enum GPTModel {
   GPT35_TURBO = 'gpt-3.5-turbo'
 }
+
+// Role
 export enum MessageRole {
   SYSTEM = 'system',
   USER = 'user',
@@ -34,6 +36,8 @@ export type GPTRequestMessage = {
   role: MessageRole
   content: string
 }
+
+// GPT request
 export type GPTRequestData = {
   model: GPTModel
   messages: GPTRequestMessage[]
@@ -78,3 +82,10 @@ export type GPTError = {
 export type MessageStorageType = {
   [key: string]: GPTResponseMessage[]
 }
+
+// Session
+export type Session = {
+  name: string
+  id: string
+}
+export type SessionList = Session[]

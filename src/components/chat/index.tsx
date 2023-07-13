@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import chatService from '@/utils/chatService'
 import { GPTResponseMessage, MessageRole } from '@/utils/types'
 // local storage
-import { setChatLog, getChatLogs, cleanChatLogs } from '@/utils/getChatStorage'
+import { updateMessage, getMessage, clearMessage } from '@/utils/getChatStorage'
 
 const LOCAL_CHANNEL_KEY = 'demo-channel'
 
@@ -19,7 +19,7 @@ export const Chat = () => {
 
   useEffect(() => {
     // fetch history from local storage & setState
-    setChatList(getChatLogs(LOCAL_CHANNEL_KEY))
+    setChatList(getMessage(LOCAL_CHANNEL_KEY))
   }, [])
 
   /**
@@ -64,7 +64,7 @@ export const Chat = () => {
           content: result
         }
         // save assistance answer when stream completed
-        setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+        updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
       }
     }
   }
@@ -84,7 +84,7 @@ export const Chat = () => {
     // update state
     setChatList(list)
     // save user question on submit
-    setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
+    updateMessage(LOCAL_CHANNEL_KEY, userChatLog)
     // call stream now
     chatService.getCompletionStream({
       prompt,
@@ -116,7 +116,7 @@ export const Chat = () => {
   //   }
   //   const list = [...chatList, userChatLog]
   //   setChatList(list)
-  //   setChatLog(LOCAL_CHANNEL_KEY, userChatLog)
+  //   updateMessage(LOCAL_CHANNEL_KEY, userChatLog)
   //   // call api now
   //   const response = await chatService.getCompletion({
   //     prompt,
@@ -129,14 +129,14 @@ export const Chat = () => {
   //       content: response.message.content
   //     }
   //     setChatList([...list, assistantChatLog])
-  //     setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+  //     updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
   //   } else {
   //     const assistantChatLog = {
   //       role: MessageRole.ASSISTANT,
   //       content: 'no result..'
   //     }
   //     setChatList([...list, assistantChatLog])
-  //     setChatLog(LOCAL_CHANNEL_KEY, assistantChatLog)
+  //     updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
   //   }
   //   // after
   //   setPrompt('')
@@ -146,7 +146,7 @@ export const Chat = () => {
   const handleClearChatLogs = () => {
     setChatList([])
     // clean local storage
-    cleanChatLogs(LOCAL_CHANNEL_KEY)
+    clearMessage(LOCAL_CHANNEL_KEY)
   }
 
   const handleKeyDownTextArea = (evt: KeyboardEvent<HTMLTextAreaElement>) => {
