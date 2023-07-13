@@ -5,11 +5,34 @@ import { IconTrash, IconMessagePlus } from '@tabler/icons-react'
 import {
   getSessionStore,
   addSession,
+  updateSession as updateSessionFunc,
   removeSession
 } from '@/utils/getChatStorage'
 //
 import clsx from 'clsx'
 import { useMantineColorScheme, ActionIcon } from '@mantine/core'
+import { EditableText } from '../editableText'
+
+const itemBaseClasses =
+  'flex cursor-pointer h-[2.4rem] items-center justify-around group px-4 rounded-md'
+
+const generateItemClasses = (
+  id: string,
+  sessionId: string,
+  colorScheme: string
+) => {
+  return clsx([
+    itemBaseClasses,
+    {
+      'hover:bg-gray-300/60': colorScheme === 'light',
+      'bg-gray-200/60': id !== sessionId && colorScheme === 'light',
+      'bg-gray-300': id === sessionId && colorScheme === 'light',
+      'hover:bg-zinc-800/50': colorScheme === 'dark',
+      'bg-zinc-800/20': id !== sessionId && colorScheme === 'dark',
+      'bg-zinc-800/90': id === sessionId && colorScheme === 'dark'
+    }
+  ])
+}
 
 type SessionComponentProps = {
   sessionId: string
@@ -40,6 +63,13 @@ export const Session: FC<SessionComponentProps> = ({ sessionId, onChange }) => {
     if (deleteSessionId === sessionId) {
       onChange(updatedSessionList[0].id)
     }
+  }
+
+  const updateSession = (name: string) => {
+    let newSessionList = updateSessionFunc(sessionId, {
+      name
+    })
+    setSessionList(newSessionList)
   }
 
   return (
@@ -79,8 +109,17 @@ export const Session: FC<SessionComponentProps> = ({ sessionId, onChange }) => {
         ])}
       >
         {sessionList.map((session) => (
-          <div key={session.id}>
-            <div>{session.name}</div>
+          <div
+            key={session.id}
+            className={generateItemClasses(session.id, sessionId, colorScheme)}
+            onClick={() => {
+              onChange(session.id)
+            }}
+          >
+            <EditableText
+              text={session.name}
+              onSave={(name: string) => updateSession(name)}
+            ></EditableText>
             {sessionList.length > 1 ? (
               <IconTrash
                 size=".8rem"

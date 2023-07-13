@@ -162,7 +162,7 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center">
+    <div className="h-screen flex flex-col items-center w-full">
       {/* chat logs */}
       <div
         className={clsx(
