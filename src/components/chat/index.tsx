@@ -1,240 +1,27 @@
-import { useEffect, useState, KeyboardEvent } from 'react'
-// libs
-import { Textarea, ActionIcon } from '@mantine/core'
-import { IconSend, IconEraser, IconSendOff } from '@tabler/icons-react'
-import clsx from 'clsx'
-// utils
-import chatService from '@/utils/chatService'
-import { GPTResponseMessage, MessageRole } from '@/utils/types'
-// local storage
-import { updateMessage, getMessage, clearMessage } from '@/utils/getChatStorage'
+import React, { useState, useEffect } from 'react'
 
-const LOCAL_CHANNEL_KEY = 'demo-channel'
+import { Session } from '../session'
+import { Message } from '../message'
+
+// local storage
+import { getSessionStore } from '@/utils/getChatStorage'
 
 export const Chat = () => {
-  const [prompt, setPrompt] = useState<string>('')
-  // const [completion, setCompletion] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [chatList, setChatList] = useState<GPTResponseMessage[]>([])
+  const [sessionId, setSessionId] = useState<string>('')
 
   useEffect(() => {
-    // fetch history from local storage & setState
-    setChatList(getMessage(LOCAL_CHANNEL_KEY))
+    const init = () => {
+      const list = getSessionStore()
+      const id = list[0].id
+      setSessionId(id)
+    }
+    init()
   }, [])
 
-  /**
-   *
-   * keep calling while "onCompleting"
-   * we keep updating state here
-   *
-   * @param data
-   * @returns
-   */
-  const setSuggestion = (data: string) => {
-    if (data === '') return
-    const length = chatList.length
-    const lastMessage = length ? chatList[length - 1] : null
-    let newList: GPTResponseMessage[] = []
-    let assistantChatLog
-    if (lastMessage?.role === MessageRole.ASSISTANT) {
-      assistantChatLog = {
-        ...lastMessage,
-        content: data
-      }
-      newList = [...chatList.slice(0, length - 1), assistantChatLog]
-    } else {
-      assistantChatLog = {
-        role: MessageRole.ASSISTANT,
-        content: data
-      }
-      newList = [...chatList, assistantChatLog]
-    }
-    // update state
-    setChatList(newList)
-  }
-
-  chatService.actions = {
-    onCompleting: (result) => setSuggestion(result),
-    onCompleted: (result) => {
-      setIsLoading(false)
-      // only save non-empty response
-      if (result) {
-        const assistantChatLog = {
-          role: MessageRole.ASSISTANT,
-          content: result
-        }
-        // save assistance answer when stream completed
-        updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
-      }
-    }
-  }
-
-  /**
-   * stream version
-   */
-  const handleSendMessage = async () => {
-    if (!prompt.trim()) return
-    // before
-    setIsLoading(true)
-    const userChatLog = {
-      role: MessageRole.USER,
-      content: prompt
-    }
-    const list = [...chatList, userChatLog]
-    // update state
-    setChatList(list)
-    // save user question on submit
-    updateMessage(LOCAL_CHANNEL_KEY, userChatLog)
-    // call stream now
-    chatService.getCompletionStream({
-      prompt,
-      history: chatList.slice(-4) // reduce the token usage
-    })
-    // after
-    setPrompt('')
-  }
-
-  /**
-   *
-   * stop the stream generation
-   *
-   */
-  const handleStopMessageGeneration = () => {
-    chatService.cancel()
-  }
-
-  /**
-   * json version
-   */
-  // const handleSendMessage = async () => {
-  //   if (!prompt) return
-  //   // before
-  //   setIsLoading(true)
-  //   const userChatLog = {
-  //     role: MessageRole.USER,
-  //     content: prompt
-  //   }
-  //   const list = [...chatList, userChatLog]
-  //   setChatList(list)
-  //   updateMessage(LOCAL_CHANNEL_KEY, userChatLog)
-  //   // call api now
-  //   const response = await chatService.getCompletion({
-  //     prompt,
-  //     history: chatList.slice(-4) // reduce the token usage
-  //   })
-  //   // response
-  //   if (response) {
-  //     const assistantChatLog = {
-  //       role: MessageRole.ASSISTANT,
-  //       content: response.message.content
-  //     }
-  //     setChatList([...list, assistantChatLog])
-  //     updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
-  //   } else {
-  //     const assistantChatLog = {
-  //       role: MessageRole.ASSISTANT,
-  //       content: 'no result..'
-  //     }
-  //     setChatList([...list, assistantChatLog])
-  //     updateMessage(LOCAL_CHANNEL_KEY, assistantChatLog)
-  //   }
-  //   // after
-  //   setPrompt('')
-  //   setIsLoading(false)
-  // }
-
-  const handleClearChatLogs = () => {
-    setChatList([])
-    // clean local storage
-    clearMessage(LOCAL_CHANNEL_KEY)
-  }
-
-  const handleKeyDownTextArea = (evt: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (evt.key === 'Enter' && !evt.shiftKey) {
-      evt.preventDefault()
-      handleSendMessage()
-    }
-  }
-
   return (
-    <div className="h-screen flex flex-col items-center">
-      {/* chat logs */}
-      <div
-        className={clsx(
-          'flex-col',
-          'h-[calc(100vh-10rem)]',
-          'overflow-y-auto',
-          'rounded-sm',
-          'w-full',
-          'px-8'
-        )}
-      >
-        {chatList.map((item, index) => (
-          <div
-            key={`${item.role}-${index}`}
-            className={clsx(
-              {
-                flex: item.role === MessageRole.USER,
-                'flex-col': item.role === MessageRole.USER,
-                'items-end': item.role === MessageRole.USER
-              },
-              'mt-4'
-            )}
-          >
-            <div>{item.role}</div>
-            <div
-              className={clsx(
-                'rounded-md',
-                'shadow-md',
-                'px-4',
-                'py-2',
-                'mt-1',
-                'w-full',
-                'max-w-4xl'
-              )}
-            >
-              {item.content}
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* bottom */}
-      <div className="flex items-center w-3/5">
-        {/* actions */}
-        <ActionIcon
-          disabled={isLoading}
-          className="mr-2"
-          onClick={() => handleClearChatLogs()}
-        >
-          <IconEraser />
-        </ActionIcon>
-        {/* input */}
-        <Textarea
-          placeholder="Please enter your prompt.."
-          className="w-full"
-          value={prompt}
-          disabled={isLoading}
-          onChange={(evt) => setPrompt(evt.target.value)}
-          onKeyDown={(evt) => handleKeyDownTextArea(evt)}
-        ></Textarea>
-        {/* buttons */}
-        {isLoading ? (
-          <ActionIcon
-            className="ml-2"
-            onClick={() => handleStopMessageGeneration()}
-          >
-            <IconSendOff />
-          </ActionIcon>
-        ) : (
-          <ActionIcon
-            loading={isLoading}
-            className="ml-2"
-            onClick={() => handleSendMessage()}
-          >
-            <IconSend />
-          </ActionIcon>
-        )}
-      </div>
+    <div className="h-screen flex w-screen">
+      <Session sessionId={sessionId} onChange={setSessionId} />
+      <Message sessionId={sessionId} />
     </div>
   )
 }

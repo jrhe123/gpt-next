@@ -57,7 +57,7 @@ export const clearMessage = (id: string): void => {
 export const getSessionStore = (): SessionList => {
   const localStorage = LocalStorage.getInstance()
   let list = localStorage.getItem<SessionList>(SESSION_STORE)
-  if (!list) {
+  if (!list || !list.length) {
     // if there's no session
     const session: Session = {
       name: 'chat',
