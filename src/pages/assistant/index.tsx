@@ -18,6 +18,7 @@ import {
   removeAssistant,
   getAssistant
 } from '@/utils/getAssistantStorage'
+import { AssistantConfig } from '@/components/assistantConfig'
 
 const showNotification = (message: string) => {
   notifications.show({
@@ -138,12 +139,14 @@ const AssistantPage: NextPage = () => {
         size="lg"
         position="right"
       >
-        {/* <AssistantConfig
+        <AssistantConfig
           assistant={editAssistant!}
           save={saveAssistant}
           remove={removeAssistant}
-        /> */}
+        />
       </Drawer>
     </div>
   )
 }
+
+export default AssistantPage
