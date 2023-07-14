@@ -2,12 +2,14 @@ import type {
   GPTResponseMessage,
   MessageStorageType,
   Session,
+  SessionInfo,
   SessionList
 } from './types'
 
 // custom LocalStorage class
 import LocalStorage from './storage'
 import { MESSAGE_STORE, SESSION_STORE } from './constant'
+import { getAssistant, getAssistantList } from './getAssistantStorage'
 
 /**
  * MessageStorageType
@@ -58,10 +60,12 @@ export const getSessionStore = (): SessionList => {
   const localStorage = LocalStorage.getInstance()
   let list = localStorage.getItem<SessionList>(SESSION_STORE)
   if (!list || !list.length) {
+    const assistant = getAssistantList()[0]
     // if there's no session
     const session: Session = {
       name: 'chat',
-      id: Date.now().toString()
+      id: Date.now().toString(),
+      assistant: assistant.id
     }
     list = [session]
     localStorage.setItem(SESSION_STORE, list)
@@ -83,9 +87,24 @@ export const addSession = (session: Session): SessionList => {
   return list
 }
 
-export const getSession = (id: string) => {
+export const getSession = (id: string): SessionInfo | null => {
   const list = getSessionStore()
-  return list.find((session) => session.id === id) || {}
+  const session = list.find((session) => session.id === id)
+  // find session
+  if (!session) return null
+  const { assistant } = session
+  let assistantInfo = getAssistant(assistant)
+  // find assistant, if not exists, pick the first one in the list
+  if (!assistantInfo) {
+    assistantInfo = getAssistantList()[0]
+    updateSession(session.id, {
+      assistant: assistantInfo.id
+    })
+  }
+  return {
+    ...session,
+    assistant: assistantInfo
+  }
 }
 
 export const updateSession = (

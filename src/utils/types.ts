@@ -87,8 +87,12 @@ export type MessageStorageType = {
 export type Session = {
   name: string
   id: string
+  assistant: string
 }
 export type SessionList = Session[]
+export type SessionInfo = Omit<Session, 'assistant'> & {
+  assistant: Assistant
+}
 
 // Assistant
 export type Assistant = {
