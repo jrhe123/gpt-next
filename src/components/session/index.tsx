@@ -38,8 +38,13 @@ const generateItemClasses = (
 type SessionComponentProps = {
   sessionId: string
   onChange: (sessionId: string) => void
+  className?: string
 }
-export const Session: FC<SessionComponentProps> = ({ sessionId, onChange }) => {
+export const Session: FC<SessionComponentProps> = ({
+  sessionId,
+  className,
+  onChange
+}) => {
   const [sessionList, setSessionList] = useState<SessionList>([])
   const { colorScheme } = useMantineColorScheme()
 
@@ -86,7 +91,8 @@ export const Session: FC<SessionComponentProps> = ({ sessionId, onChange }) => {
         'w-64',
         'flex',
         'flex-col',
-        'px-2'
+        'px-2',
+        className
       )}
     >
       <div className="flex justify-between py-2 w-full">

@@ -32,6 +32,7 @@ import {
 import { ThemeSwitch } from '../themeSwitch'
 import { AssistantSelect } from '../assistantSelect'
 import { USERMAP } from '@/utils/constant'
+import { Markdown } from '../markdown'
 
 type MessageComponentProps = {
   sessionId: string
@@ -280,7 +281,11 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
                   'max-w-4xl'
                 )}
               >
-                {item.content}
+                {isUser ? (
+                  <div>{item.content}</div>
+                ) : (
+                  <Markdown markdownText={item.content}></Markdown>
+                )}
               </div>
             </div>
           )

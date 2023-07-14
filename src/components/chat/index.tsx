@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react'
 import { Session } from '../session'
 import { Message } from '../message'
 
+//
+import { MediaQuery } from '@mantine/core'
+
 // local storage
 import { getSessionStore } from '@/utils/getChatStorage'
 
@@ -20,7 +23,16 @@ export const Chat = () => {
 
   return (
     <div className="h-screen flex w-screen">
-      <Session sessionId={sessionId} onChange={setSessionId} />
+      <MediaQuery
+        smallerThan="md"
+        styles={{
+          width: '0 !important',
+          padding: '0 !important',
+          overflow: 'hidden'
+        }}
+      >
+        <Session sessionId={sessionId} onChange={setSessionId}></Session>
+      </MediaQuery>
       <Message sessionId={sessionId} />
     </div>
   )
