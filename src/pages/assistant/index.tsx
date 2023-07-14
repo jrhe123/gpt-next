@@ -15,8 +15,7 @@ import {
   getAssistantList,
   addAssistant,
   updateAssistant,
-  removeAssistant,
-  getAssistant
+  removeAssistant
 } from '@/utils/getAssistantStorage'
 import { AssistantConfig } from '@/components/assistantConfig'
 
@@ -142,7 +141,7 @@ const AssistantPage: NextPage = () => {
         <AssistantConfig
           assistant={editAssistant!}
           save={saveAssistant}
-          remove={removeAssistant}
+          remove={deleteAssistant}
         />
       </Drawer>
     </div>

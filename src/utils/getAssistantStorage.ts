@@ -55,7 +55,7 @@ export const removeAssistant = (id: string): AssistantList => {
   const updatedList = list.filter((item) => item.id !== id)
   //
   const localStorage = LocalStorage.getInstance()
-  localStorage.setItem(ASSISTANT_STORE, list)
+  localStorage.setItem(ASSISTANT_STORE, updatedList)
   return updatedList
 }
 
