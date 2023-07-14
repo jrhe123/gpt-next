@@ -120,8 +120,9 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
     updateMessage(sessionId, userChatLog)
     // call stream now
     chatService.getCompletionStream({
+      options: assistant,
       prompt,
-      history: messageList.slice(-4) // reduce the token usage
+      history: messageList.slice(-assistant?.max_log!) // reduce the token usage
     })
     // after
     setPrompt('')
