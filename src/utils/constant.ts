@@ -11,6 +11,12 @@ export const ASSISTANT_INIT: Omit<Assistant, 'id'>[] = [
       "You're a smart AI assistant, your job is provide detailed information to your clients",
     temperature: 0.7,
     max_log: 4,
-    max_token: 800
+    max_tokens: 800
   }
 ]
+
+export const USERMAP = {
+  user: '👨‍💻‍',
+  assistant: '🤖',
+  system: '🕸'
+}

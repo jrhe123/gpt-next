@@ -1,13 +1,36 @@
 import { useEffect, useState, KeyboardEvent, FC } from 'react'
 // libs
-import { Textarea, ActionIcon } from '@mantine/core'
-import { IconSend, IconEraser, IconSendOff } from '@tabler/icons-react'
+import {
+  Textarea,
+  ActionIcon,
+  Popover,
+  Button,
+  useMantineColorScheme,
+  Loader
+} from '@mantine/core'
+import {
+  IconSend,
+  IconSendOff,
+  IconEraser,
+  IconDotsVertical
+} from '@tabler/icons-react'
 import clsx from 'clsx'
+//
+import Link from 'next/link'
 // utils
 import chatService from '@/utils/chatService'
-import { GPTResponseMessage, MessageRole } from '@/utils/types'
+import { Assistant, GPTResponseMessage, MessageRole } from '@/utils/types'
 // local storage
-import { updateMessage, getMessage, clearMessage } from '@/utils/getChatStorage'
+import {
+  updateMessage,
+  getMessage,
+  clearMessage,
+  updateSession
+} from '@/utils/getChatStorage'
+//
+import { ThemeSwitch } from '../themeSwitch'
+import { AssistantSelect } from '../assistantSelect'
+import { USERMAP } from '@/utils/constant'
 
 type MessageComponentProps = {
   sessionId: string
@@ -16,6 +39,8 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
   const [prompt, setPrompt] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [messageList, setMessageList] = useState<GPTResponseMessage[]>([])
+  const [assistant, setAssistant] = useState<Assistant>()
+  const { colorScheme } = useMantineColorScheme()
 
   useEffect(() => {
     // fetch history from local storage & setState
@@ -161,8 +186,49 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
     }
   }
 
+  const onAssistantChange = (assistant: Assistant) => {
+    setAssistant(assistant)
+    updateSession(sessionId, {
+      assistant: assistant.id
+    })
+  }
+
   return (
     <div className="h-screen flex flex-col items-center w-full">
+      {/* session selection */}
+      <div
+        className={clsx([
+          'flex',
+          'justify-between',
+          'items-center',
+          'p-4',
+          'shadow-sm',
+          'h-[6rem]'
+        ])}
+      >
+        <Popover width={100} position="bottom" withArrow shadow="sm">
+          <Popover.Target>
+            <Button
+              size="sm"
+              variant="subtle"
+              className="px-1"
+              rightIcon={<IconDotsVertical size="1rem"></IconDotsVertical>}
+            >
+              AI assistant
+            </Button>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Link href="/assistant" className="no-underline text-green-600">
+              Edit
+            </Link>
+          </Popover.Dropdown>
+        </Popover>
+        <AssistantSelect
+          value={assistant?.id!}
+          onChange={onAssistantChange}
+        ></AssistantSelect>
+        <ThemeSwitch></ThemeSwitch>
+      </div>
       {/* chat logs */}
       <div
         className={clsx(
@@ -174,34 +240,47 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
           'px-8'
         )}
       >
-        {messageList.map((item, index) => (
-          <div
-            key={`${item.role}-${index}`}
-            className={clsx(
-              {
-                flex: item.role === MessageRole.USER,
-                'flex-col': item.role === MessageRole.USER,
-                'items-end': item.role === MessageRole.USER
-              },
-              'mt-4'
-            )}
-          >
-            <div>{item.role}</div>
+        {messageList.map((item, index) => {
+          const isUser = item.role === 'user'
+          return (
             <div
+              key={`${item.role}-${index}`}
               className={clsx(
-                'rounded-md',
-                'shadow-md',
-                'px-4',
-                'py-2',
-                'mt-1',
-                'w-full',
-                'max-w-4xl'
+                {
+                  flex: item.role === MessageRole.USER,
+                  'flex-col': item.role === MessageRole.USER,
+                  'items-end': item.role === MessageRole.USER
+                },
+                'mt-4'
               )}
             >
-              {item.content}
+              <div>
+                {USERMAP[item.role]}
+                {!isUser && index === messageList.length - 1 && isLoading && (
+                  <Loader size="sm" variant="dots" className="ml-2" />
+                )}
+              </div>
+              <div
+                className={clsx(
+                  {
+                    'bg-gray-100': colorScheme === 'light',
+                    'bg-zinc-700/40': colorScheme === 'dark',
+                    'whitespace-break-spaces': isUser
+                  },
+                  'rounded-md',
+                  'shadow-md',
+                  'px-4',
+                  'py-2',
+                  'mt-1',
+                  'w-full',
+                  'max-w-4xl'
+                )}
+              >
+                {item.content}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
       {/* bottom */}
       <div className="flex items-center w-3/5">

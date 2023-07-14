@@ -1,4 +1,4 @@
-import { SessionList } from '@/utils/types'
+import type { Session as SessionType, SessionList } from '@/utils/types'
 import React, { FC, useState, useEffect } from 'react'
 import { IconTrash, IconMessagePlus } from '@tabler/icons-react'
 // local storage
@@ -12,6 +12,7 @@ import {
 import clsx from 'clsx'
 import { useMantineColorScheme, ActionIcon } from '@mantine/core'
 import { EditableText } from '../editableText'
+import { getAssistantList } from '@/utils/getAssistantStorage'
 
 const itemBaseClasses =
   'flex cursor-pointer h-[2.4rem] items-center justify-around group px-4 rounded-md'
@@ -48,9 +49,11 @@ export const Session: FC<SessionComponentProps> = ({ sessionId, onChange }) => {
   }, [])
 
   const createSession = () => {
-    const newSession = {
+    const assistantList = getAssistantList()
+    const newSession: SessionType = {
       name: `session-${sessionList.length + 1}`,
-      id: Date.now().toString()
+      id: Date.now().toString(),
+      assistant: assistantList[0].id
     }
     onChange(newSession.id)
     const updatedSessionList = addSession(newSession)
