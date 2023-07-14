@@ -25,7 +25,8 @@ import {
   updateMessage,
   getMessage,
   clearMessage,
-  updateSession
+  updateSession,
+  getSession
 } from '@/utils/getChatStorage'
 //
 import { ThemeSwitch } from '../themeSwitch'
@@ -43,6 +44,8 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
   const { colorScheme } = useMantineColorScheme()
 
   useEffect(() => {
+    const session = getSession(sessionId)
+    setAssistant(session?.assistant)
     // fetch history from local storage & setState
     setMessageList(getMessage(sessionId))
     // if sessionId is changed, while loading
