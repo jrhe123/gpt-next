@@ -89,3 +89,15 @@ export type Session = {
   id: string
 }
 export type SessionList = Session[]
+
+// Assistant
+export type Assistant = {
+  id: string
+  name: string
+  description?: string
+  prompt: string
+  temperature?: number
+  max_log: number
+  max_token: number
+}
+export type AssistantList = Assistant[]
