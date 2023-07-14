@@ -66,6 +66,8 @@ class ChatService {
         const chunkValue = decoder.decode(value)
         result += chunkValue
 
+        console.log('[chatService.ts] onCompleting: ', result)
+
         // on completing
         this.actions?.onCompleting(result)
 
@@ -77,6 +79,8 @@ class ChatService {
     } finally {
       console.log('stream call is completed / aborted')
       if (this.actions?.onCompleted) {
+        console.log('[chatService.ts] onCompleted: ', result)
+
         this.actions.onCompleted(result)
       }
       // since it's singletone class

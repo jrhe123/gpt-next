@@ -52,9 +52,9 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
     // if sessionId is changed, while loading
     // we need to abort the chatService
     if (isLoading) {
-      handleStopMessageGeneration()
+      chatService.cancel()
     }
-  }, [sessionId, isLoading])
+  }, [sessionId])
 
   /**
    *
@@ -120,11 +120,12 @@ export const Message: FC<MessageComponentProps> = ({ sessionId }) => {
     // save user question on submit
     updateMessage(sessionId, userChatLog)
     // call stream now
-    chatService.getCompletionStream({
+    const params = {
       options: assistant,
       prompt,
       history: messageList.slice(-assistant?.max_log!) // reduce the token usage
-    })
+    }
+    chatService.getCompletionStream(params)
     // after
     setPrompt('')
   }
