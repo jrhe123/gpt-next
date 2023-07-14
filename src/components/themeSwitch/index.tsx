@@ -17,7 +17,6 @@ export const ThemeSwitch = () => {
       size="xs"
       onClick={() => {
         const scheme = colorScheme === 'light' ? 'dark' : 'light'
-        console.log('switch scheme: ', scheme)
         toggleColorScheme(scheme)
       }}
     >

@@ -14,7 +14,7 @@ import ErrorBoundary from '../components/errorBoundary'
 export default function App({ Component, pageProps }: AppProps) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
   const toggleColorScheme = (value?: ColorScheme) => {
-    setColorScheme(value || colorScheme === 'dark' ? 'dark' : 'light')
+    setColorScheme(value || (colorScheme === 'dark' ? 'dark' : 'light'))
   }
 
   return (
