@@ -98,6 +98,8 @@ export type Assistant = {
   prompt: string
   temperature?: number
   max_log: number
-  max_token: number
+  max_tokens: number
 }
 export type AssistantList = Assistant[]
+export type EditAssistant = Omit<Assistant, 'id'> &
+  Partial<Pick<Assistant, 'id'>>
